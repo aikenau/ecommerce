@@ -13,7 +13,7 @@ connectDB(); // Establish connection to the database
 app.use(express.json());
 app.use(cors());
 
-// Use routes
+// Nice Use routes
 app.use("/api/counter", counterRoutes);
 
 app.listen(PORT, () => {
