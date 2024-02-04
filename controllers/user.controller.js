@@ -1,4 +1,4 @@
-const User = require("../models/user.model");
+const { User, validateUser } = require("../models/user.model");
 
 exports.getUserProfile = (req, res) => {
   console.log("get user profile");
@@ -17,9 +17,16 @@ exports.deleteUserProfile = (req, res) => {
 
 exports.addNewUser = async (req, res) => {
   console.log("add new user");
-  const userData = req.body;
+  const error = validateUser(req.body);
+
+  if (error) {
+    return res
+      .status(400)
+      .json({ message: "Validation failed", errors: error.details });
+  }
+
   try {
-    const newUser = new User(userData);
+    const newUser = new User(req.body);
     await newUser.save();
     res.status(201).json({ message: "New user added", userId: newUser._id }); // Respond with success
   } catch (error) {

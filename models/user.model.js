@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
@@ -19,4 +20,30 @@ const UserSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("User", UserSchema);
+function validateUser(user) {
+  const schema = Joi.object({
+    username: Joi.string().alphanum().min(3).max(30).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).max(128).required(),
+    profile: Joi.object({
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      address: Joi.object({
+        street: Joi.string().required(),
+        city: Joi.string().required(),
+        postal: Joi.string().required(),
+        country: Joi.string().required(),
+      }).required(),
+    }).required(),
+    roles: Joi.array().items(Joi.string().valid("user", "admin")).required(),
+    createdAt: Joi.date(),
+    updatedAt: Joi.date(),
+  });
+
+  return schema.validate(user);
+}
+
+const User = mongoose.model("User", UserSchema);
+
+module.exports.validateUser = validateUser;
+module.exports.User = User;
