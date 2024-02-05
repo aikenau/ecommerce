@@ -10,7 +10,7 @@ const AuthSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-function validateAuth(user) {
+function validateAuth(loginInfo) {
   const schema = Joi.object({
     username: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string().email().required(),
@@ -18,7 +18,7 @@ function validateAuth(user) {
     roles: Joi.array().items(Joi.string().valid("user", "admin")).required(),
   });
 
-  return schema.validate(user);
+  return schema.validate(loginInfo);
 }
 
 const Auth = mongoose.model("Auth", AuthSchema);
