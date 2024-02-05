@@ -17,7 +17,7 @@ exports.deleteUserProfile = (req, res) => {
 
 exports.addNewUser = async (req, res) => {
   console.log("add new user");
-  const error = validateUser(req.body);
+  const { error } = validateUser(req.body);
 
   if (error) {
     return res
