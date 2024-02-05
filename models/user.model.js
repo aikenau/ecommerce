@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
 
 function validateUser(user) {
   const schema = Joi.object({
-    username: Joi.string().min(3).max(30).required(),
+    username: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).max(128).required(),
     profile: Joi.object({
@@ -40,21 +40,7 @@ function validateUser(user) {
     updatedAt: Joi.date(),
   });
 
-  const { error, value } = schema.validate(user);
-
-  if (error) {
-    console.log(error.details);
-    return {
-      isValue: false,
-      message: "Validation failed!!!!",
-      error: error.details,
-    };
-  }
-
-  return {
-    isValue: true,
-    value: value,
-  };
+  return schema.validate(user);
 }
 
 const User = mongoose.model("User", UserSchema);
