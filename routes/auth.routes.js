@@ -16,7 +16,19 @@ router.post("/", async (req, res) => {
     return res.status(400).json("Invalid username or password");
 
   const token = info.generateAuthToken();
-  res.header("x-auth-token", token);
+
+  //
+  // --- when frontend is ok
+  //
+  // res.cookie("token", token, {
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: "None",
+  //   maxAge: 3600000,
+  // });
+  // res.status(200).send("Token stored in cookie");
+
+  res.header("x-auth-token", token).send({ token });
 });
 
 function validateLoginInfo(req) {

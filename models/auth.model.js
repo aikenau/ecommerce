@@ -7,7 +7,7 @@ const AuthSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 8, maxlength: 128 },
-  isAdmin: { type: Boolean, default: false },
+  isAdmin: Boolean,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
@@ -25,7 +25,7 @@ function validateAuth(loginInfo) {
     username: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).max(128).required(),
-    isAdmin: Joi.boolean().required(),
+    isAdmin: Joi.boolean(),
   });
 
   return schema.validate(loginInfo);

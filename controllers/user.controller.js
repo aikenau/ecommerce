@@ -7,7 +7,7 @@ const {
 } = require("../models/userProfile.model");
 
 exports.getUserProfile = async (req, res) => {
-  console.log("GET /api/user/:id - Get user profile");
+  console.log("GET /api/user/ - Get user profile");
   console.log(req.user);
 
   const user = await UserProfile.findOne({ userId: req.user._id });
@@ -18,7 +18,7 @@ exports.getUserProfile = async (req, res) => {
 };
 
 exports.updateOrCreateUserProfile = async (req, res) => {
-  console.log("POST /api/user/:id - Update user profile");
+  console.log("POST /api/user/ - Update user profile");
   const { error } = validateUserProfile(req.body);
 
   if (error) {
@@ -26,7 +26,7 @@ exports.updateOrCreateUserProfile = async (req, res) => {
       .status(400)
       .json({ message: "Validation failed", errors: error.details });
   }
-
+  console.log(req.user._id);
   const user = await UserProfile.findOneAndUpdate(
     { userId: req.user._id },
     req.body,
@@ -34,26 +34,32 @@ exports.updateOrCreateUserProfile = async (req, res) => {
   );
 
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return res.status(404).json({ message: "User not found 2" });
   }
 
   res.json({ message: "User profile updated", user });
 };
 
-exports.deleteUserProfile = async (req, res) => {
-  console.log("DELETE /api/user/:id - Delete a user");
+exports.deleteAccount = async (req, res) => {
+  console.log("DELETE /api/user/ - Delete a user");
 
-  const user = await UserProfile.findOneAndDelete({ userId: req.user._id });
-
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+  const userProfile = await UserProfile.findOneAndDelete({
+    userId: req.user._id,
+  });
+  if (!userProfile) {
+    return res.status(404).json({ message: "User profile not found" });
   }
 
-  res.json({ message: "User profile deleted" });
+  const auth = await Auth.findByIdAndDelete(req.user._id);
+  if (!auth) {
+    return res.status(404).json({ message: "User auth information not found" });
+  }
+
+  res.json({ message: "User profile and auth information deleted" });
 };
 
 exports.signUpNewUser = async (req, res) => {
-  console.log("POST /api/user/ - SignUp a new user");
+  console.log("POST /api/user/register - SignUp a new user");
   const { error } = validateAuth(req.body);
 
   if (error) {
