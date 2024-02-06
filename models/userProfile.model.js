@@ -31,7 +31,7 @@ function validateUserProfile(userProfile) {
   return schema.validate(userProfile);
 }
 
-const UserProfile = mongoose.model("UserProfile", UserProfileSchema);
+const UserProfile = mongoose.model("User-Profile", UserProfileSchema);
 
 module.exports.validateUserProfile = validateUserProfile;
 module.exports.UserProfile = UserProfile;

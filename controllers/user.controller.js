@@ -1,10 +1,10 @@
+require("express-async-errors");
+const bcrypt = require("bcrypt");
 const { Auth, validateAuth } = require("../models/auth.model");
 const {
   UserProfile,
   validateUserProfile,
 } = require("../models/userProfile.model");
-
-require("express-async-errors");
 
 exports.getUserProfile = async (req, res) => {
   console.log("GET /api/user/:id - Get user profile");
@@ -14,6 +14,10 @@ exports.getUserProfile = async (req, res) => {
     return res.status(404).json({ message: "User not found" });
   }
   res.json(user);
+};
+
+exports.insertUserProfile = async (req, res) => {
+  console.log("POST /api/user:id - Insert user profile");
 };
 
 exports.updateUserProfile = async (req, res) => {
@@ -66,7 +70,12 @@ exports.signUpNewUser = async (req, res) => {
     return res.status(400).json({ message: "User already exists" });
   }
 
-  const newUser = new Auth(req.body);
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+  const newUser = new Auth({
+    ...req.body,
+    password: hashedPassword,
+  });
+
   await newUser.save();
-  res.status(201).json({ message: "New user added", userId: newUser._id }); // Respond with success
+  res.status(201).json({ message: "New user added", userId: newUser._id });
 };

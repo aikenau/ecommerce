@@ -1,3 +1,5 @@
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
@@ -10,12 +12,17 @@ const AuthSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
+AuthSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
+  return token;
+};
+
 function validateAuth(loginInfo) {
   const schema = Joi.object({
     username: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(8).max(128).required(),
-    roles: Joi.array().items(Joi.string().valid("user", "admin")).required(),
+    roles: Joi.array().items(Joi.string().valid("admin", "super")).required(),
   });
 
   return schema.validate(loginInfo);
