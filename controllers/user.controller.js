@@ -8,20 +8,17 @@ const {
 
 exports.getUserProfile = async (req, res) => {
   console.log("GET /api/user/:id - Get user profile");
+  console.log(req.user);
 
-  const user = await UserProfile.findOne({ userId: req.params.id });
+  const user = await UserProfile.findOne({ userId: req.user._id });
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
   res.json(user);
 };
 
-exports.insertUserProfile = async (req, res) => {
-  console.log("POST /api/user:id - Insert user profile");
-};
-
-exports.updateUserProfile = async (req, res) => {
-  console.log("PUT /api/user/:id - Update user profile");
+exports.updateOrCreateUserProfile = async (req, res) => {
+  console.log("POST /api/user/:id - Update user profile");
   const { error } = validateUserProfile(req.body);
 
   if (error) {
@@ -31,9 +28,9 @@ exports.updateUserProfile = async (req, res) => {
   }
 
   const user = await UserProfile.findOneAndUpdate(
-    { userId: req.params.id },
+    { userId: req.user._id },
     req.body,
-    { new: true }
+    { new: true, upsert: true }
   );
 
   if (!user) {
@@ -46,7 +43,7 @@ exports.updateUserProfile = async (req, res) => {
 exports.deleteUserProfile = async (req, res) => {
   console.log("DELETE /api/user/:id - Delete a user");
 
-  const user = await UserProfile.findOneAndDelete({ userId: req.params.id });
+  const user = await UserProfile.findOneAndDelete({ userId: req.user._id });
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });
