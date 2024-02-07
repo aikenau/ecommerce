@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const ProductSchema = new mongoose.Schema({
-  uuid: { type: String, default: uuidv4 },
+  productId: { type: String, default: uuidv4 },
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true, min: 0 },
@@ -14,11 +14,11 @@ const ProductSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-ProductSchema.index({ uuid: 1 });
+ProductSchema.index({ productId: 1 });
 
 function validateProduct(product) {
   const schema = Joi.object({
-    uuid: Joi.string().guid({ version: "uuidv4" }).optional(),
+    productId: Joi.string().guid({ version: "uuidv4" }).optional(),
     name: Joi.string().required(),
     description: Joi.string().required(),
     price: Joi.number().min(0).required(),
