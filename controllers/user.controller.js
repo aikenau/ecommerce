@@ -8,7 +8,6 @@ const {
 
 exports.getUserProfile = async (req, res) => {
   console.log("GET /api/user/ - Get user profile");
-  console.log(req.user);
 
   const user = await UserProfile.findOne({ userId: req.user._id });
   if (!user) {
