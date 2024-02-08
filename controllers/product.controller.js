@@ -1,6 +1,5 @@
 require("express-async-errors");
-const bcrypt = require("bcrypt");
-const { Product, validateProduct } = require("../models/product.model");
+const { Product } = require("../models/product.model");
 
 exports.getAllProduct = async (req, res) => {
   console.log("GET /api/product/ - Get all product");
@@ -11,46 +10,9 @@ exports.getAllProduct = async (req, res) => {
 };
 
 exports.getSingleProduct = async (req, res) => {
-  console.log("GET /api/product/:uuid - Get single product");
-  const product = await Product.findOne({ uuid: req.params.productId });
+  console.log("GET /api/product/:productId - Get single product");
+  const product = await Product.findOne({ productId: req.params.productId });
   if (!product) return res.status(400).json({ message: "No product!" });
 
   res.status(200).send(product);
-};
-
-exports.addSingleProduct = async (req, res) => {
-  console.log("POST /api/product/:uuid - Add a product");
-  const { error } = validateProduct(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-
-  let product = new Product(req.body);
-  product = await product.save();
-  res.status(201).json(product);
-};
-
-exports.updateProductInfo = async (req, res) => {
-  console.log("PUT /api/product/:uuid - Update a product info");
-  const { error } = validateProduct(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-
-  const product = await Product.findOneAndUpdate(
-    { uuid: req.params.productId },
-    req.body,
-    {
-      new: true,
-    }
-  );
-  if (!product) return res.status(404).json({ message: "Product not found" });
-
-  res.json(product);
-};
-
-exports.deleteProduct = async (req, res) => {
-  console.log("DELETE /api/product/:uuid - Delete single product");
-  const product = await Product.findOneAndDelete({
-    uuid: req.params.productId,
-  });
-  if (!product) return res.status(404).json({ message: "Product not found" });
-
-  res.status(200).json({ message: "Product deleted successfully" });
 };

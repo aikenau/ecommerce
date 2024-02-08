@@ -81,3 +81,10 @@ exports.signUpNewUser = async (req, res) => {
   await newUser.save();
   res.status(201).json({ message: "New user added", userId: newUser._id });
 };
+
+// Auth
+exports.updateEmail = async (req, res) => {};
+
+exports.requestPasswordReset = async (req, res) => {};
+
+exports.resetPassword = async (req, res) => {};

@@ -8,7 +8,9 @@ router.post("/", async (req, res) => {
   const { error } = validateLoginInfo(req.body);
   if (error) return res.status(400).json(error.details);
 
-  let info = await Auth.findOne({ username: req.body.username });
+  let info = await Auth.findOne({
+    $or: [{ username: req.body.username }, { email: req.body.email }],
+  });
   if (!info) return res.status(400).json("Invalid username or password");
 
   const validPassword = await bcrypt.compare(req.body.password, info.password);
@@ -18,7 +20,7 @@ router.post("/", async (req, res) => {
   const token = info.generateAuthToken();
 
   //
-  // --- when frontend is ok
+  // Uncomment and use according to frontend setup
   //
   // res.cookie("token", token, {
   //   httpOnly: true,

@@ -1,10 +1,11 @@
-const { nanoid } = require("nanoid");
+const crypto = require("crypto");
+const { v4: uuidv4 } = require("uuid");
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const OrderSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "Auth", required: true },
-  orderId: { type: String, default: () => nanoid() },
+  orderId: { type: String, default: generateDefaultOrderId },
   items: [
     {
       productId: {
@@ -28,10 +29,15 @@ const OrderSchema = new mongoose.Schema({
 
 OrderSchema.index({ orderId: 1, userId: 1 });
 
+function generateDefaultOrderId() {
+  const uuid = uuidv4();
+  return crypto.createHash("md5").update(uuid).digest("hex");
+}
+
 function validateOrder(order) {
   const schema = Joi.object({
     userId: Joi.string().required(),
-    orderId: Joi.string().required(),
+    orderId: Joi.string(),
     items: Joi.array()
       .items(
         Joi.object({
@@ -46,7 +52,7 @@ function validateOrder(order) {
       .valid("pending", "shipped", "delivered", "cancelled", "refunded")
       .optional(),
   });
-  return Schema.validate(order);
+  return schema.validate(order);
 }
 
 const Order = mongoose.model("Order", OrderSchema);
