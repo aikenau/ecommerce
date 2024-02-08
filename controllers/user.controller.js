@@ -1,6 +1,6 @@
 require("express-async-errors");
 const bcrypt = require("bcrypt");
-const { Auth, validateAuth } = require("../models/auth.model");
+const { Auth } = require("../models/auth.model");
 const {
   UserProfile,
   validateUserProfile,
@@ -58,7 +58,7 @@ exports.deleteAccount = async (req, res) => {
 };
 
 exports.signUpNewUser = async (req, res) => {
-  console.log("POST /api/user/register - SignUp a new user");
+  console.log("POST /api/auth/register - SignUp a new user");
   const { error } = validateAuth(req.body);
 
   if (error) {
@@ -67,7 +67,9 @@ exports.signUpNewUser = async (req, res) => {
       .json({ message: "Validation failed", errors: error.details });
   }
 
-  const IsAlreadyExist = await Auth.findOne({ email: req.body.email });
+  const IsAlreadyExist = await Auth.findOne({
+    $or: [{ username: req.body.username }, { email: req.body.email }],
+  });
   if (IsAlreadyExist) {
     return res.status(400).json({ message: "User already exists" });
   }
@@ -81,10 +83,3 @@ exports.signUpNewUser = async (req, res) => {
   await newUser.save();
   res.status(201).json({ message: "New user added", userId: newUser._id });
 };
-
-// Auth
-exports.updateEmail = async (req, res) => {};
-
-exports.requestPasswordReset = async (req, res) => {};
-
-exports.resetPassword = async (req, res) => {};

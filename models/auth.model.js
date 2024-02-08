@@ -20,6 +20,13 @@ AuthSchema.methods.generateAuthToken = function () {
   return token;
 };
 
+AuthSchema.methods.generateAuthTokenWithExpires = function () {
+  const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  return token;
+};
+
 function validateAuth(loginInfo) {
   const schema = Joi.object({
     username: Joi.string().alphanum().min(3).max(30).required(),
@@ -31,7 +38,25 @@ function validateAuth(loginInfo) {
   return schema.validate(loginInfo);
 }
 
+function validateEmail(email) {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+  });
+  return schema.validate(email);
+}
+
+function validateLoginInfo(req) {
+  const schema = Joi.object({
+    username: Joi.string().alphanum().min(3).max(30),
+    email: Joi.string().email().min(5).max(255),
+    password: Joi.string().min(8).max(128).required(),
+  });
+
+  return schema.validate(req);
+}
+
 const Auth = mongoose.model("Auth", AuthSchema);
 
 module.exports.validateAuth = validateAuth;
+module.exports.validateEmail = validateEmail;
 module.exports.Auth = Auth;
