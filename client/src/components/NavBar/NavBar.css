@@ -1,0 +1,18 @@
+
+
+
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Aligns children (items and icons) on opposite ends */
+  align-items: center; /* Centers children vertically */
+  padding: 10px; /* Add padding as needed */
+  /* Add other styles such as background-color, etc. */
+}
+
+
+
+/* Styles for the submenu */
+.submenu {
+  display: none;
+  /* Add more styles for the submenu (background, colors, etc.) */
+}

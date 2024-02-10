@@ -1,0 +1,25 @@
+.nav-link {
+    display: block;
+    padding: 10px; /* Add padding to the links if necessary */
+    text-decoration: none; /* Optional: removes the underline from links */
+    color: rgb(255, 255, 255); /* Optional: sets the text color of the links */
+}
+  
+.nav-item {
+    padding: 10px;
+}
+
+.navbar-nav {
+    list-style: none;
+    display: flex;
+    gap: 20px; /* Space between each nav item */
+    margin: 0;
+    padding: 0;
+    /* Additional styling if needed */
+  }
+  
+  .navbar-nav:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+  }

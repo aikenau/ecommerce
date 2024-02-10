@@ -1,40 +1,25 @@
-import React, { useEffect, useState } from "react";
+// src/App.jsx
+import React, { useState } from "react";
+import NavBar from "./components/NavBar/NavBar";
+import Footer from "./components/Footer";
+import ProductList from "./components/ProductList";
+import "./App.css";
+
+const initialProducts = [
+  { id: 1, name: "Product 1", price: 100 },
+  // Add more products as needed
+];
 
 function App() {
-  const [counter, setCounter] = useState(0);
-
-  useEffect(() => {
-    // Fetch the initial counter value from the server
-    fetch("https://dry-badlands-60590-6ecef3395fc5.herokuapp.com/api/counter")
-      .then((response) => response.json())
-      .then((data) => setCounter(data.value));
-  }, []);
-
-  // Function to increment the counter
-  const incrementCounter = () => {
-    fetch(
-      "https://dry-badlands-60590-6ecef3395fc5.herokuapp.com/api/counter/increment",
-      { method: "POST" }
-    )
-      .then((response) => response.json())
-      .then((data) => setCounter(data.value));
-  };
-
-  // Function to decrement the counter
-  const decrementCounter = () => {
-    fetch(
-      "https://dry-badlands-60590-6ecef3395fc5.herokuapp.com/api/counter/decrement",
-      { method: "POST" }
-    )
-      .then((response) => response.json())
-      .then((data) => setCounter(data.value));
-  };
+  const [products] = useState(initialProducts);
 
   return (
-    <div>
-      <h2>Counter: {counter}</h2>
-      <button onClick={incrementCounter}>Increment</button>
-      <button onClick={decrementCounter}>Decrement</button>
+    <div className="App">
+      <NavBar />
+      <main>
+        <ProductList products={products} />
+      </main>
+      <Footer />
     </div>
   );
 }

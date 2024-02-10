@@ -1,9 +1,47 @@
-#root {
-  max-width: 1280px;
+body,html {
+  height: 100%;
+  width:100%;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+
+nav {
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+main {
+  padding-top: 60px;
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.App main {
+  flex-grow: 1;
+}
+
+/* ----------------------- */
 
 .logo {
   height: 6em;
