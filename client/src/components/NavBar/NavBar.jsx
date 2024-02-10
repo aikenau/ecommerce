@@ -2,6 +2,7 @@ import React from "react";
 import "./Navbar.css";
 import NavbarItem from "../NavBarItem/NavBarItem";
 import NavBarIcons from "../NavBarIcons/NavBarIcons";
+import NavBarLogo from "../NavBarLogo/NavBarLogo";
 
 const navItems = [
   { name: "HOME", url: "#home!!" },
@@ -14,6 +15,7 @@ const navItems = [
 const NavBar = () => {
   return (
     <nav className="navbar">
+      <NavBarLogo />
       <NavbarItem Items={navItems} />
       <NavBarIcons />
     </nav>
