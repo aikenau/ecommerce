@@ -1,6 +1,8 @@
 /node_modules
 /client/node_modules
+/test
 /playground
 .env
+.env.test
 
 .DS_Store

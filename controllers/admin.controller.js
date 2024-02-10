@@ -10,29 +10,38 @@ const {
 // User
 exports.getUsersList = async (req, res) => {
   console.log("GET /api/admin/user/ - retrieve user list");
+
   const userProfiles = await UserProfile.find();
-  res.json(userProfiles);
+  if (!userProfiles)
+    return res.status(404).json({ message: "User not found!" });
+
+  res.status(200).json(userProfiles);
 };
 
 exports.getSingleUser = async (req, res) => {
   console.log("GET /api/admin/user/:userId - retrieve particular user");
+
   const userProfile = await UserProfile.findOne({ userId: req.params.userId });
   if (!userProfile) return res.status(404).send("User not found.");
-  res.json(userProfile);
+
+  res.status(200).json(userProfile);
 };
 
 exports.deleteSpecificUser = async (req, res) => {
   console.log("DELETE /api/admin/user/:userId - delete particular user acount");
+
   const userProfile = await UserProfile.findOneAndDelete({
     userId: req.params.userId,
   });
+
   if (!userProfile) return res.status(404).send("User not found.");
 
   const auth = await Auth.findByIdAndDelete(req.params.userId);
   if (!auth) {
     return res.status(404).json({ message: "User auth information not found" });
   }
-  res.status(200).send("User deleted successfully.");
+
+  res.status(200).json({ message: "User deleted successfully." });
 };
 
 // Order
@@ -43,7 +52,7 @@ exports.getOrderList = async (req, res) => {
   if (orders.length === 0)
     return res.status(404).send("No orders found for this user.");
 
-  res.json(orders);
+  res.status(200).json(orders);
 };
 
 exports.getSingleOrder = async (req, res) => {
@@ -54,7 +63,7 @@ exports.getSingleOrder = async (req, res) => {
   });
   if (!order) return res.status(404).send("Order not found.");
 
-  res.send(order);
+  res.status(200).json(order);
 };
 
 exports.changeOrderStatus = async (req, res) => {
@@ -70,7 +79,7 @@ exports.changeOrderStatus = async (req, res) => {
   );
   if (!order) return res.status(404).send("Order not found.");
 
-  res.send(order);
+  res.status(200).json(order);
 };
 
 exports.deleteOrder = async (req, res) => {
@@ -81,7 +90,7 @@ exports.deleteOrder = async (req, res) => {
   });
   if (!order) return res.status(404).send("Order not found.");
 
-  res.status(204).json({ message: "The order deleted!" });
+  res.status(200).json({ message: "The order deleted!" });
 };
 
 // Product
@@ -109,7 +118,7 @@ exports.updateProductInfo = async (req, res) => {
   );
   if (!product) return res.status(404).json({ message: "Product not found" });
 
-  res.json(product);
+  res.status(200).json(product);
 };
 
 exports.deleteProduct = async (req, res) => {

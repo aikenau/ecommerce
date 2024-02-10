@@ -59,4 +59,5 @@ const Auth = mongoose.model("Auth", AuthSchema);
 
 module.exports.validateAuth = validateAuth;
 module.exports.validateEmail = validateEmail;
+module.exports.validateLoginInfo = validateLoginInfo;
 module.exports.Auth = Auth;

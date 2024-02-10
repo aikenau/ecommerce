@@ -1,7 +1,11 @@
 require("express-async-errors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Auth, validateEmail } = require("../models/auth.model");
+const {
+  Auth,
+  validateEmail,
+  validateLoginInfo,
+} = require("../models/auth.model");
 
 exports.updateEmail = async (req, res) => {
   console.log("POST /api/user/update-email - Update user's email");

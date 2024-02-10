@@ -6,7 +6,7 @@ exports.getAllProduct = async (req, res) => {
   const products = await Product.find();
   if (!products) return res.status(400).json({ message: "No product!" });
 
-  res.status(200).send(products);
+  res.status(200).json(products);
 };
 
 exports.getSingleProduct = async (req, res) => {
@@ -14,5 +14,5 @@ exports.getSingleProduct = async (req, res) => {
   const product = await Product.findOne({ productId: req.params.productId });
   if (!product) return res.status(400).json({ message: "No product!" });
 
-  res.status(200).send(product);
+  res.status(200).json(product);
 };
